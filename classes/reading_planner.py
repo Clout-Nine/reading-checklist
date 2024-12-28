@@ -36,7 +36,7 @@ class ReadingPlanner:
     self.daily_categories: pl.DataFrame = self.daily_categories \
       .with_columns([
         pl.when(include_weekend).then(pl.lit(items))
-          .when(pl.col('day').is_in(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'])).then(pl.lit(items))
+          .when(~pl.col('day').is_in(['Sun', 'Sat'])).then(pl.lit(items))
           .otherwise(pl.lit([]))
           .alias(category)
       ])
@@ -141,13 +141,13 @@ class ReadingPlanner:
       ]) \
       .sort('week', 'day') \
       .with_columns([
-        pl.when(pl.col('day').eq(1)).then(pl.lit('Sunday'))
-          .when(pl.col('day').eq(2)).then(pl.lit('Monday'))
-          .when(pl.col('day').eq(3)).then(pl.lit('Tuesday'))
-          .when(pl.col('day').eq(4)).then(pl.lit('Wednesday'))
-          .when(pl.col('day').eq(5)).then(pl.lit('Thursday'))
-          .when(pl.col('day').eq(6)).then(pl.lit('Friday'))
-          .when(pl.col('day').eq(7)).then(pl.lit('Saturday'))
+        pl.when(pl.col('day').eq(1)).then(pl.lit('Sun'))
+          .when(pl.col('day').eq(2)).then(pl.lit('Mon'))
+          .when(pl.col('day').eq(3)).then(pl.lit('Tue'))
+          .when(pl.col('day').eq(4)).then(pl.lit('Wed'))
+          .when(pl.col('day').eq(5)).then(pl.lit('Thu'))
+          .when(pl.col('day').eq(6)).then(pl.lit('Fri'))
+          .when(pl.col('day').eq(7)).then(pl.lit('Sat'))
         .alias('day')
       ])
     
@@ -265,11 +265,11 @@ class ReadingPlanner:
       daily_categories (pl.DataFrame): the daily categories DataFrame
     """
     return pl.DataFrame(data=[
-      {'day': 'Sunday'},
-      {'day': 'Monday'},
-      {'day': 'Tuesday'},
-      {'day': 'Wednesday'},
-      {'day': 'Thursday'},
-      {'day': 'Friday'},
-      {'day': 'Saturday'}
+      {'day': 'Sun'},
+      {'day': 'Mon'},
+      {'day': 'Tue'},
+      {'day': 'Wed'},
+      {'day': 'Thu'},
+      {'day': 'Fri'},
+      {'day': 'Sat'}
     ])
